@@ -8,7 +8,10 @@
 	{
 		$id = $_GET['edit_id'];
 
-		$stmt_edit = $DB_con->prepare('SELECT *  FROM articles WHERE idArticle =:id');
+		$stmt_edit = $DB_con->prepare('SELECT 
+  
+  idArticle ,nom	,description	,image	,idCategorie,	prix
+  FROM articles WHERE idArticle =:id');
 		$stmt_edit->execute(array(':id'=>$id));
 		$edit_row = $stmt_edit->fetch(PDO::FETCH_ASSOC);
 
@@ -31,7 +34,7 @@
 
         $stmtId = $DB_con->prepare("select idCategorie from categories where nomCategorie=?");
 
-        $stmtId->bindParam(1,$categorie,pdo::PARAM_STR);
+        $stmtId->bindParam(1, $categorie,pdo::PARAM_STR);
         $stmtId->execute();
 
         $idCategorie=$stmtId->fetch()[0];
@@ -54,7 +57,7 @@
 				{
 
 					unlink($upload_dir.$edit_row['image']);
-					move_uploaded_file($tmp_dir,$upload_dir.$image);
+					move_uploaded_file($tmp_dir,$upload_dir.$imageGen);
 				}
 				else
 				{
@@ -76,25 +79,20 @@
 		// if no error occured, continue ....
 		if(!isset($errMSG))
 		{
-         echo $nom,$description,$image,$prix,$idCat,$id;
-
-            //exit();
-			$stmtUpdate = $DB_con->prepare('UPDATE articles
-									     SET nom=:nom, 
-										     description=:description, 
-										     image=:image ,
-										     	idCategorie=:idCat,
-										     	 prix=:prix
-								       WHERE idArticle=:id');
 
 
-            $stmtUpdate->bindParam(':nom',$nom);
-            $stmtUpdate->bindParam(':description',$description);
-            $stmtUpdate->bindParam(':image',$imageGen);
+			$stmtUpdate = $DB_con->prepare('UPDATE articles SET   
+									      nom=?,description=?, image=?,idCategorie=?, prix=?							       
+									      WHERE idArticle=?');
 
-            $stmtUpdate->bindParam(':idCat',$idCategorie);
-            $stmtUpdate->bindParam(':prix',$prix);
-            $stmtUpdate->bindParam(':id',$id);
+
+            $stmtUpdate->bindParam(1,$nom);
+           $stmtUpdate->bindParam( 2,$description);
+            $stmtUpdate->bindParam(3,$imageGen);
+            $stmtUpdate->bindParam(4,$idCategorie);
+            $stmtUpdate->bindParam(5,$prix);
+            $stmtUpdate->bindParam(6,$id);
+            $stmtUpdate->execute();
 
 			if($stmtUpdate->execute()){
 				?>
@@ -186,10 +184,7 @@
     	<td><label class="control-label">ImageArticle</label></td>
 
         <td>
-        	<p><img src="imageArticle/<?php
-
-              //  $stmt_edit->execute();  echo $stmt_edit->fetch()[3];
-             echo $image; ?>" height="150" width="150" /></p>
+        	<p><img src="imageArticle/<?php echo $image; ?>" height="150" width="150" /></p>
         	<input class="input-group" type="file" name="imageLoad" accept="image/*" />
         </td>
     </tr>

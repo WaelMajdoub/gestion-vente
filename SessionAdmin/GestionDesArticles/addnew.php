@@ -164,9 +164,6 @@
         <td><input class="form-control" type="text" name="description" placeholder="Description" value="<?php echo $description; ?>" /></td>
     </tr>
 
-
-
-
         <tr>
     	<td><label class="control-label">Image Article</label></td>
         <td><input class="input-group" type="file" name="imageToLoad" accept="image/*" /></td>

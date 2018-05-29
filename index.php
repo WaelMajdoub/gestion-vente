@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<--!wael -->
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,7 +23,8 @@
       height: 60vh;
     }
 
-    @media (max-width: 740px) {
+    @media (max-width: 740px)
+    {
       html,
       body,
       header,
@@ -45,31 +46,77 @@
 
 <body>
 
-  <!-- Navbar -->
   <?php
   include "includes/NavBar.php";
   ?>
-  <!-- Navbar -->
 
-  <!--Carousel Wrapper-->
   <?php
   include "includes/Slider.php";
   ?>
-  <!--/.Carousel Wrapper-->
 
-  <!--Main layout-->
-  <?php
-  include "includes/Main.php";
-  ?>
-  <!--Main layout-->
+  <main>
+      <div class="container" style="background-color: #fff2f7"  style="width: 100%; height: 100%;" >
 
-  <!--Footer-->
+          <table class="table table-bordered"  style="width: 100%; height: 100%;">
+
+              <th  style="text-align: center ;font-family: 'Comic Sans MS' ;font-size: 20px ;color: #858a9f"> Nom Article</th>
+              <th style="text-align: center ;font-family: 'Comic Sans MS' ;font-size: 20px ;color: #858a9f"> Description</th>
+              <th style="text-align: center ;font-family: 'Comic Sans MS' ;font-size: 20px ;color: #858a9f">Image</th>
+              <th style="text-align: center ;font-family: 'Comic Sans MS' ;font-size: 20px ;color: #858a9f">Catégorie</th>
+              <th style="text-align: center ;font-family: 'Comic Sans MS' ;font-size: 20px ;color: #858a9f" >Prix</th>
+
+              <?php
+              require_once 'dbconfig.php';
+
+              $stmt=$DB_con->prepare('select * from articles ');
+              $stmt->execute();
+              if($stmt->rowCount() > 0)
+              {
+                  while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+                  {
+                      extract($row);?>
+                      <tr>
+                          <td> <?php echo $row['nom']; ?></td>
+                          <td><?php echo $row['description']; ?> </td>
+                          <td>
+<img src="SessionAdmin/GestionDesArticles/imageArticle/<?php echo $row['image'];?>  "   class="img-rounded" width="200px" height="200px" />
+                          </td>
+                          <!-- recupération des catégories  -->
+                          <?php
+                          $stmt_selectCat = $DB_con->prepare("select nomCategorie from categories where idCategorie=?");
+                          $stmt_selectCat->bindParam(1,$row['idCategorie'],PDO::PARAM_INT);
+                          $stmt_selectCat->execute();
+                          $CatNom = $stmt_selectCat->fetch()[0];
+                          ?>
+                          <td>
+                              <?php echo $CatNom; ?>
+                          </td>
+                          <td><?php echo $row['prix']; ?> </td>
+                      </tr>
+                      <?php
+                  }
+              }
+              else
+              {
+                  ?>
+                  <div class="col-xs-12">
+                      <div class="alert alert-warning">
+                          <span class="glyphicon glyphicon-info-sign"></span>   Pas  encore d'articles ...
+                      </div>
+                  </div>
+                  <?php
+              }
+
+              ?>
+          </table>
+
+      </div>
+  </main>
+
   <?php
   include "includes/Footer.php";
   ?>
-  <!--/.Footer-->
 
-  <!-- SCRIPTS -->
   <!-- JQuery -->
   <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
   <!-- Bootstrap tooltips -->

@@ -5,25 +5,19 @@ require_once '../dbconfig.php';
 if(isset($_GET['delete_id']))
 {
 
-    /*// select image from db to delete
-    $stmt_select = $DB_con->prepare('SELECT image FROM articles WHERE idArticle =:idArt');
-    $stmt_select->execute(array(':idArt'=>$_GET['delete_id']));
-    $imgRow=$stmt_select->fetch(PDO::FETCH_ASSOC);
-    unlink("imageArticle/".$imgRow['image']);*/
-
-
 
     // it will delete an actual record from db
-
-    $stmt_delete_pre = $DB_con->prepare('DELETE FROM articles WHERE  idArticle =:idArt)');
-    $stmt_delete_pre->bindParam(':idArt',$_GET['delete_id']);
-    $stmt_delete_pre->execute();
-
-
+  echo $idDel= $_GET['delete_id'];
+    $stmt_delete_pre = $DB_con->prepare('DELETE  FROM articles where 	idArticle =?');
+   $stmt_delete_pre->bindParam(1,$idDel);
+   $stmt_delete_pre->execute();
 
 
 
-    header("Location: index.php");
+
+
+
+  header("Location: index.php");
 }
 
 ?>
@@ -73,7 +67,7 @@ if(isset($_GET['delete_id']))
                      <h4 class="page-header"><label > Nom Article:</label><?php echo $row['nom'] ?></h4>
                      
                     <h4 class="page-header"><label > Description:</label><?php echo $row['description']  ; ?></h4>
-                    <h4 class="page-header"><label > Description:</label><?php echo $row['prix']  ; ?></h4>
+                    <h4 class="page-header"><label > Prix:</label><?php echo $row['prix']  ; ?> TND</h4>
                     <h4 class="page-header"><label > Nom Categorie:</label><?php
 
                         $stmtCat =$DB_con->prepare('select nomCategorie from categories WHERE 
