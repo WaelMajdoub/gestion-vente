@@ -18,15 +18,9 @@
               </h1>
 
               <p>
-                <strong>Mariem Hichri </strong>
+                <strong>iTek Store</strong>
               </p>
-                <p>
-                    <strong>& </strong>
-                </p>
-                <p>
-                    <strong>Sana Ammar </strong>
-                </p>
-
+            
 
 
             </div>
